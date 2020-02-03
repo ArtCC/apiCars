@@ -12,13 +12,13 @@ app.use('/api/users/', user)
 app.use('/api/companies/', company)
 app.use('/api/sales/', sale)
 app.use('/api/auth/', auth)
-const port = process.env.PORT || 3003
-app.listen(port, () => console.log('Escuchando Puerto: ' + port))
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log('Listening in port: ' + port))
 
 mongoose.connect('mongodb://localhost/carsdb', { 
     useNewUrlParser: true, 
     useFindAndModify: false, 
     useUnifiedTopology: true,
     useCreateIndex: true })
-    .then(() => console.log('Conectado a MongoDb'))
-    .catch(err => console.log('No se ha conectado a MongoDb: ' + err.message))
+    .then(() => console.log('Connected to MongoDb'))
+    .catch(err => console.log('He hasn not connected to MongoDb: ' + err.message))
