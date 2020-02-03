@@ -1,10 +1,12 @@
 const mongoose = require('mongoose')
 const express = require('express')
-const {Company} = require('../models/company')
+const { Company } = require('../models/company')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
-// GET
+/**
+ * GET request
+ */
 router.get('/list', async (req, res) => {
     const companies = await Company.find()
     res.send(companies)
@@ -28,7 +30,9 @@ router.get('/:name', async (req, res) => {
     }
 })
 
-// POST
+/**
+ * POST request
+ */
 router.post('/create', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,7 +46,9 @@ router.post('/create', async (req, res) => {
     res.status(201).send(company)
 })
 
-// PUT
+/**
+ * PUT request
+ */
 router.put('/:id', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -60,7 +66,9 @@ router.put('/:id', async (req, res) => {
     res.status(204).send(company)
 })
 
-// DELETE
+/**
+ * DELETE request
+ */
 router.delete('/delete/:id', async (req, res) => {
     const company = await Company.findByIdAndDelete(req.params.id)
     if (!company) {

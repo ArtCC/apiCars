@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const role = require('../helpers/role')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    isAdmin: Boolean,
+    role: String,
     date: { type: Date, default: Date.now }
 })
 
@@ -28,7 +29,7 @@ userSchema.methods.generateJWT = function () {
     return jwt.sign({
         _id: this._id,
         name: this.name,
-        isAdmin: this.isAdmin
+        role: this.role
     },
         process.env.SECRET_KEY_JWT_API_CARS)
 }

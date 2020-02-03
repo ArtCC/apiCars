@@ -1,14 +1,17 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const auth = require('../middleware/auth')
-const admin = require('../middleware/admin')
+const authorize = require('../middleware/role')
+const role = require('../helpers/role')
 const Car = require('../models/car')
 const {Company} = require('../models/company')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
-// GET
-router.get('/list', [auth, admin], async (req, res) => {
+/**
+ * GET request
+ */
+router.get('/list', [auth, authorize([role.Admin])], async (req, res) => {
     const cars = await Car
         .find()
         .populate('company', 'name country')
@@ -33,7 +36,9 @@ router.get('/:company', async (req, res) => {
     }
 })
 
-// POST
+/**
+ * POST request
+ */
 router.post('/create', [
     check('model').isLength({ min: 2 })
 ], async (req, res) => {
@@ -53,7 +58,9 @@ router.post('/create', [
     res.status(201).send(car)
 })
 
-// PUT
+/**
+ * PUT request
+ */
 router.put('/:id', [
     check('model').isLength({ min: 2 })
 ], async (req, res) => {
@@ -77,7 +84,9 @@ router.put('/:id', [
     res.status(204).send(car)
 })
 
-// DELETE
+/**
+ * DELETE request
+ */
 router.delete('/delete/:id', async (req, res) => {
     const car = await Car.findByIdAndDelete(req.params.id)
     if (!car) {

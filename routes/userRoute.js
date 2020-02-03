@@ -1,19 +1,22 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const auth = require('../middleware/auth')
-const admin = require('../middleware/admin')
+const authorize = require('../middleware/role')
+const role = require('../helpers/role')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
-// GET
-router.get('/list', [auth, admin], async (req, res) => {
+/**
+ * GET request
+ */
+router.get('/list', [auth, authorize([role.Admin])], async (req, res) => {
     const users = await User.find()
     res.send(users)
 })
 
-router.get('/id/:id', [auth, admin], async (req, res) => {
+router.get('/id/:id', [auth, authorize([role.Admin])], async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
         res.status(404).send('There is no user with that id')
@@ -22,7 +25,7 @@ router.get('/id/:id', [auth, admin], async (req, res) => {
     }
 })
 
-router.get('/:name', [auth, admin], async (req, res) => {
+router.get('/:name', [auth, authorize([role.Admin])], async (req, res) => {
     const user = await User.find({ "name": req.params.name })
     if (!user) {
         res.status(404).send('There is no user with that name')
@@ -31,7 +34,9 @@ router.get('/:name', [auth, admin], async (req, res) => {
     }
 })
 
-// POST
+/**
+ * POST request
+ */
 router.post('/create', [
     check('name').isLength({ min: 3 }),
     check('email').isEmail(),
@@ -53,7 +58,7 @@ router.post('/create', [
         isCostumer: false,
         email: req.body.email,
         password: hashPassword,
-        isAdmin: req.body.isAdmin
+        role: req.body.role
     })
     const result = await user.save()
     const token = user.generateJWT()
@@ -65,7 +70,9 @@ router.post('/create', [
     })
 })
 
-// PUT
+/**
+ * PUT request
+ */
 router.put('/:id', [
     check('name').isLength({ min: 3 }),
     check('email').isEmail()
@@ -88,7 +95,9 @@ router.put('/:id', [
     res.status(204).send(user)
 })
 
-// DELETE
+/**
+ * DELETE request
+ */
 router.delete('/delete/:id', async (req, res) => {
     const user = await User.findByIdAndDelete(req.params.id)
     if (!user) {

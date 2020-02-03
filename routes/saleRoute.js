@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const auth = require('../middleware/auth')
-const Sale = require('../models/sale')
+const sale = require('../models/sale')
 const User = require('../models/user')
 const Car = require('../models/car')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
-// GET
+/**
+ * GET request
+ */
 router.get('/list', async (req, res) => {
     const sales = await Sale
         .find()
@@ -25,7 +27,9 @@ router.get('/id/:id', async (req, res) => {
     }
 })
 
-// POST
+/**
+ * POST request
+ */
 router.post('/buy', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -62,7 +66,9 @@ router.post('/buy', auth, async (req, res) => {
     }
 })
 
-// PUT
+/**
+ * PUT request
+ */
 router.put('/:id', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -80,7 +86,9 @@ router.put('/:id', async (req, res) => {
     res.status(204).send(sale)
 })
 
-// DELETE
+/**
+ * DELETE request
+ */
 router.delete('/delete/:id', async (req, res) => {
     const sale = await Sale.findByIdAndDelete(req.params.id)
     if (!sale) {

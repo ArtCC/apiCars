@@ -5,7 +5,9 @@ const User = require('../models/user')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
-// POST
+/**
+ * POST request
+ */
 router.post('/login', [
     check('email').isEmail(),
     check('password').isLength({ min: 5 })
