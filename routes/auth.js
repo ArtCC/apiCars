@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
-const bcrypt = require('bcrypt')
 
 // POST
 router.post('/login', [
@@ -18,13 +19,15 @@ router.post('/login', [
     if (!user) return res.status(400).send('Usuario o contraseña incorrecto')
     const validPassword = await bcrypt.compare(req.body.password, user.password)
     if (!validPassword) return res.status(400).send('Usuario o contraseña incorrecto')
-    res.status(200).send({
+
+    const token = jwt.sign({
         _id: user._id,
         name: user.name,
-        lastname: user.lastname,
-        email: user.email,
-        isCostumer: user.isCostumer
-    })
+        'createAt': Date.now
+      },
+      'yBph?=6gT2J7Tnn%g&32Sdr$')
+
+    res.status(200).send({'token': token})
 })
 
 module.exports = router
