@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 
-const userShema = new mongoose.Schema( {
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -22,6 +23,14 @@ const userShema = new mongoose.Schema( {
     date: { type: Date, default: Date.now }
 })
 
-const User = mongoose.model('user', userShema)
+userSchema.methods.generateJWT = function () {
+    return jwt.sign({
+        _id: this._id,
+        name: this.name
+    },
+        'yBph?=6gT2J7Tnn%g&32Sdr$')
+}
+
+const User = mongoose.model('user', userSchema)
 
 module.exports = User

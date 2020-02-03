@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
-const bcrypt = require('bcrypt')
 
 // GET
 router.get('/list', async (req, res) => {
@@ -53,7 +53,8 @@ router.post('/create', [
         password: hashPassword
     })
     const result = await user.save()
-    res.status(201).send({
+    const token = user.generateJWT()
+    res.status(201).header('Authorization', token).send({
         _id: user._id,
         name: user.name,
         lastname: user.lastname,
