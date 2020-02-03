@@ -11,6 +11,10 @@ const { check, validationResult } = require('express-validator')
 /**
  * GET request
  */
+router.get('/', async (req, res) => {
+    res.status(200).send('Hello World!')
+})
+
 router.get('/list', [auth, authorize([role.Admin])], async (req, res) => {
     const users = await User.find()
     res.send(users)
