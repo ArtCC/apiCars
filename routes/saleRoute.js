@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const auth = require('../middleware/auth')
 const Sale = require('../models/sale')
 const User = require('../models/user')
 const Car = require('../models/car')
@@ -25,7 +26,7 @@ router.get('/id/:id', async (req, res) => {
 })
 
 // POST
-router.post('/buy', async (req, res) => {
+router.post('/buy', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
