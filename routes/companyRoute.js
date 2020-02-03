@@ -13,7 +13,7 @@ router.get('/list', async (req, res) => {
 router.get('/id/:id', async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
-        res.status(404).send('No tenemos ningún usuario con ese id')
+        res.status(404).send('There is no company with that id')
     } else {
         res.send(user)
     }
@@ -22,7 +22,7 @@ router.get('/id/:id', async (req, res) => {
 router.get('/:name', async (req, res) => {
     const user = await User.find({ "name": req.params.name })
     if (!user) {
-        res.status(404).send('No tenemos ningún usuario con ese nombre')
+        res.status(404).send('There is no company with that name')
     } else {
         res.send(user)
     }
@@ -55,7 +55,7 @@ router.put('/:id', async (req, res) => {
         new: true
     })
     if (!company) {
-        return res.status(404).send('La compañía con ese ID no existe')
+        return res.status(404).send('The company with that ID does not exist')
     }
     res.status(204).send(company)
 })
@@ -64,9 +64,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     const company = await Company.findByIdAndDelete(req.params.id)
     if (!company) {
-        return res.status(404).send('La compañía con ese ID no existe, no se puede borrar')
+        return res.status(404).send('The company with that ID does not exist and cannot be erased')
     }
-    res.status(200).send('Compañía borrada')
+    res.status(200).send('Company delete ok')
 })
 
 module.exports = router

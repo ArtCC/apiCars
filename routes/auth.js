@@ -15,9 +15,9 @@ router.post('/login', [
         return res.status(422).json({ errors: errors.array() });
     }
     let user = await User.findOne({ email: req.body.email })
-    if (!user) return res.status(400).send('Usuario o contraseña incorrecto')
+    if (!user) return res.status(400).send('User or password are incorrect')
     const validPassword = await bcrypt.compare(req.body.password, user.password)
-    if (!validPassword) return res.status(400).send('Usuario o contraseña incorrecto')
+    if (!validPassword) return res.status(400).send('User or password are incorrect')
     const token = user.generateJWT()
     res.status(200).send({ token: token })
 })

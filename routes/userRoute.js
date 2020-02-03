@@ -14,7 +14,7 @@ router.get('/list', async (req, res) => {
 router.get('/id/:id', async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
-        res.status(404).send('No tenemos ningún usuario con ese id')
+        res.status(404).send('There is no user with that id')
     } else {
         res.send(user)
     }
@@ -23,7 +23,7 @@ router.get('/id/:id', async (req, res) => {
 router.get('/:name', async (req, res) => {
     const user = await User.find({ "name": req.params.name })
     if (!user) {
-        res.status(404).send('No tenemos ningún usuario con ese nombre')
+        res.status(404).send('There is no user with that name')
     } else {
         res.send(user)
     }
@@ -40,7 +40,7 @@ router.post('/create', [
         return res.status(422).json({ errors: errors.array() });
     }
     let user = await User.findOne({ email: req.body.email })
-    if (user) return res.status(400).send('El usuario ya existe')
+    if (user) return res.status(400).send('The user already exists')
 
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.password, salt)
@@ -80,7 +80,7 @@ router.put('/:id', [
         new: true
     })
     if (!user) {
-        return res.status(404).send('El usuario con ese ID no existe')
+        return res.status(404).send('The user with that ID does not exist')
     }
     res.status(204).send(user)
 })
@@ -89,9 +89,9 @@ router.put('/:id', [
 router.delete('/delete/:id', async (req, res) => {
     const user = await User.findByIdAndDelete(req.params.id)
     if (!user) {
-        return res.status(404).send('El usuario con ese ID no existe, no se puede borrar')
+        return res.status(404).send('The user with that ID does not exist and cannot be erased')
     }
-    res.status(200).send('Usuario borrado')
+    res.status(200).send('User delete ok')
 })
 
 module.exports = router

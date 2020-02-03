@@ -28,7 +28,7 @@ userSchema.methods.generateJWT = function () {
         _id: this._id,
         name: this.name
     },
-        'yBph?=6gT2J7Tnn%g&32Sdr$')
+        process.env.SECRET_KEY_JWT_API_CARS)
 }
 
 const User = mongoose.model('user', userSchema)

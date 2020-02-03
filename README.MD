@@ -6,6 +6,14 @@ This is a basic exercise for the development of a Node.js backend with JWT authe
 
 Install modules with npm install.
 
+Use:
+
+```
+export SECRET_KEY_JWT_API_CARS=YOUR_PASWORD_FOR_JWT_MODULE
+```
+
+in terminal for add global variable for JWT.
+
 ### LICENSE
 
 This project is free and use <b>CC BY-NC-SA</b>.

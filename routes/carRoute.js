@@ -16,7 +16,7 @@ router.get('/list', async (req, res) => {
 router.get('/id/:id', async (req, res) => {
     const car = await Car.findById(req.params.id)
     if (!car) {
-        res.status(404).send('No tenemos ningún coche con ese id')
+        res.status(404).send('There is no such thing as a car')
     } else {
         res.send(car)
     }
@@ -25,7 +25,7 @@ router.get('/id/:id', async (req, res) => {
 router.get('/:company', async (req, res) => {
     const car = await Car.find({ "company": req.params.company })
     if (!car) {
-        res.status(404).send('No tenemos ningún coche de esa marca')
+        res.status(404).send('There is no such car')
     } else {
         res.send(car)
     }
@@ -70,7 +70,7 @@ router.put('/:id', [
         new: true
     })
     if (!car) {
-        return res.status(404).send('El coche con ese ID no existe')
+        return res.status(404).send('The car with that ID does not exist')
     }
     res.status(204).send(car)
 })
@@ -79,9 +79,9 @@ router.put('/:id', [
 router.delete('/delete/:id', async (req, res) => {
     const car = await Car.findByIdAndDelete(req.params.id)
     if (!car) {
-        return res.status(404).send('El coche con ese ID no existe, no se puede borrar')
+        return res.status(404).send('The car with that ID does not exist and cannot be erased')
     }
-    res.status(200).send('Coche borrado')
+    res.status(200).send('Car delete ok')
 })
 
 module.exports = router

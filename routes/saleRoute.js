@@ -18,7 +18,7 @@ router.get('/list', async (req, res) => {
 router.get('/id/:id', async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
-        res.status(404).send('No tenemos ningún usuario con ese id')
+        res.status(404).send('There is no user with that id')
     } else {
         res.send(user)
     }
@@ -31,12 +31,12 @@ router.post('/buy', async (req, res) => {
         return res.status(422).json({ errors: errors.array() });
     }
     const user = await User.findById(req.body.userId)
-    if (!user) return res.status(400).send('El usuario no existe')
+    if (!user) return res.status(400).send('The user not exist')
 
     const car = await Car.findById(req.body.carId)
-    if (!car) return res.status(400).send('El coche no existe')
+    if (!car) return res.status(400).send('The car not exist')
 
-    if (car.available === false) return res.status(400).send('El coche ya ha sido vendido')
+    if (car.available === false) return res.status(400).send('The car has already been sold')
 
     const sale = new Sale({
         user: req.body.userId,
@@ -74,7 +74,7 @@ router.put('/:id', async (req, res) => {
         new: true
     })
     if (!sale) {
-        return res.status(404).send('La venta con ese ID no existe')
+        return res.status(404).send('The sale with that ID does not exist')
     }
     res.status(204).send(sale)
 })
@@ -83,9 +83,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     const sale = await Sale.findByIdAndDelete(req.params.id)
     if (!sale) {
-        return res.status(404).send('La venta con ese ID no existe, no se puede borrar')
+        return res.status(404).send('The sale with that ID does not exist and cannot be erased')
     }
-    res.status(200).send('Venta borrada')
+    res.status(200).send('Sale delete ok')
 })
 
 module.exports = router
