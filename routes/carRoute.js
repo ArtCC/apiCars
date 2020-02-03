@@ -1,12 +1,14 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const auth = require('../middleware/auth')
+const admin = require('../middleware/admin')
 const Car = require('../models/car')
 const {Company} = require('../models/company')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
 // GET
-router.get('/list', async (req, res) => {
+router.get('/list', [auth, admin], async (req, res) => {
     const cars = await Car
         .find()
         .populate('company', 'name country')

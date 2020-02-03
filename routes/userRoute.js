@@ -1,17 +1,19 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const auth = require('../middleware/auth')
+const admin = require('../middleware/admin')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const router = express.Router()
 const { check, validationResult } = require('express-validator')
 
 // GET
-router.get('/list', async (req, res) => {
+router.get('/list', [auth, admin], async (req, res) => {
     const users = await User.find()
     res.send(users)
 })
 
-router.get('/id/:id', async (req, res) => {
+router.get('/id/:id', [auth, admin], async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
         res.status(404).send('There is no user with that id')
@@ -20,7 +22,7 @@ router.get('/id/:id', async (req, res) => {
     }
 })
 
-router.get('/:name', async (req, res) => {
+router.get('/:name', [auth, admin], async (req, res) => {
     const user = await User.find({ "name": req.params.name })
     if (!user) {
         res.status(404).send('There is no user with that name')
@@ -50,7 +52,8 @@ router.post('/create', [
         lastname: req.body.lastname,
         isCostumer: false,
         email: req.body.email,
-        password: hashPassword
+        password: hashPassword,
+        isAdmin: req.body.isAdmin
     })
     const result = await user.save()
     const token = user.generateJWT()
